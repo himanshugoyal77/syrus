@@ -1,27 +1,18 @@
 import React from "react";
-import { useState } from "react";
 
 const InputForm = () => {
+
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    console.log(event.target.value);
   };
 
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    time: "",
-    location: "",
-    price: "",
-    artist: "",
+    name: '',
+    description: '',
   });
 
   const handleSubmit = () => {
-    event.preventDefault()
-    console.log(formData);
+    console.log("pressed");
   };
 
   return (
@@ -39,8 +30,7 @@ const InputForm = () => {
             <input
               type="text"
               placeholder="Type here"
-              name="title"
-              value={formData.title}
+              value={formData.name}
               onChange={handleInputChange}
               className="input input-bordered w-full max-w-xs"
             />
@@ -55,9 +45,6 @@ const InputForm = () => {
             <textarea
               className="textarea textarea-bordered h-24 w-80"
               placeholder="Event Description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
             ></textarea>
           </label>
         </div>
@@ -70,10 +57,7 @@ const InputForm = () => {
             <input
               type="text"
               placeholder="Type here"
-              name="time"
               className="input input-bordered w-full max-w-xs"
-              value={formData.time}
-              onChange={handleInputChange}
             />
           </label>
         </div>
@@ -86,10 +70,7 @@ const InputForm = () => {
             <input
               type="text"
               placeholder="Type here"
-              name="location"
               className="input input-bordered w-full max-w-xs"
-              value={formData.location}
-              onChange={handleInputChange}
             />
           </label>
         </div>
@@ -103,9 +84,6 @@ const InputForm = () => {
               type="text"
               placeholder="Type here"
               className="input input-bordered w-full max-w-xs"
-              name="price"
-              value={formData.price}
-              onChange={handleInputChange}
             />
           </label>
         </div>
@@ -119,9 +97,6 @@ const InputForm = () => {
               type="text"
               placeholder="Type here"
               className="input input-bordered w-full max-w-xs"
-              name="artist"
-              value={formData.artist}
-              onChange={handleInputChange}
             />
           </label>
         </div>
