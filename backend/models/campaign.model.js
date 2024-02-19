@@ -13,8 +13,14 @@ const campaignSchema = new mongoose.Schema(
     startDate: {
       type: Date,
     },
-    time: {
+    startTime: {
+      type: String,
+    },
+    endDate: {
       type: Date,
+    },
+    endTime: {
+      type: String,
     },
     venue: {
       type: String,
@@ -40,12 +46,20 @@ const campaignSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: "User",
     },
+    totalRating: {
+      type: Number,
+      default: 4,
+    },
+    reviews: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Review",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Campaign = mongoose.model("campaign", campaignSchema);
+const Campaign = mongoose.model("Campaign", campaignSchema);
 
 export default Campaign;

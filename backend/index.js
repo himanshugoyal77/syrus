@@ -6,7 +6,9 @@ import {
   deleteCampaign,
   updateCampaign,
   getCampaignById,
+  addReviewToCampaign,
 } from "./controller/campaign.controller.js";
+import { createUser } from "./controller/user.controller.js";
 
 const app = express();
 const PORT = process.env.PORT || 8800;
@@ -24,6 +26,10 @@ app.get("/campaigns", getCampaigns);
 app.get("/campaign/:id", getCampaignById);
 app.delete("/campaign/:id", deleteCampaign);
 app.put("/campaign/:id", updateCampaign);
+app.put("/campaign/add-review/:id", addReviewToCampaign);
+
+// user routes
+app.post("/user/new", createUser);
 
 app.listen(PORT, () => {
   connectDB();
