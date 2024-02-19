@@ -5,12 +5,16 @@ import { DatePicker } from "antd";
 const { RangePicker } = DatePicker;
 import dayjs from "dayjs";
 import { TimePicker } from "antd";
+import axios from "axios";
 
 const dateFormat = "YYYY/MM/DD";
 
 const InputForm = ({ coordinates }) => {
   const { lat, lon } = coordinates;
   const [city, setCity] = useState("");
+  const [date, setDate] = useState([]);
+  const [time, setTime] = useState([]);
+  const [imageUrl, setImageUrl] = useState([]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -21,12 +25,11 @@ const InputForm = ({ coordinates }) => {
   };
 
   const [formData, setFormData] = useState({
-    title: "",
+    eventName: "",
     description: "",
-    time: "",
-    location: "",
-    price: "",
-    artist: "",
+    enteryFees: "",
+    organizer: "",
+    contact: "",
   });
 
   const handleFile1 = async (e) => {
@@ -40,8 +43,7 @@ const InputForm = ({ coordinates }) => {
       }
       data.append("upload_preset", "fiverr");
       const url = await upload(data);
-      console.log(url);
-      //setProfileImage(url);
+      setImageUrl([...imageUrl, url]);
       // console.log("url", profileImage);
     }
     toast.success("File Uploaded");
@@ -60,10 +62,21 @@ const InputForm = ({ coordinates }) => {
     setCity(data.city);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // make post req at http://localhost:8800/campaign/new
+    const res = await axios.post("http://localhost:8800/campaign/new", {
+      ...formData,
+      images: imageUrl,
+      coords: [lat, lon],
+      venue: city,
+      startDate: date[0],
+      startTime: time[0],
+      endDate: date[1],
+      endTime: time[1],
+    });
 
-    console.log(formData);
+    console.log("res", res);
   };
 
   return (
@@ -83,9 +96,9 @@ const InputForm = ({ coordinates }) => {
               </div>
               <input
                 type="text"
-                placeholder="Type here"
-                name="title"
-                value={formData.title}
+                placeholder="Event Name"
+                name="eventName"
+                value={formData.eventName}
                 onChange={handleInputChange}
                 className="input input-bordered w-full max-w-xs"
               />
@@ -101,8 +114,8 @@ const InputForm = ({ coordinates }) => {
                 type="text"
                 placeholder="Type here"
                 className="input input-bordered w-full max-w-xs"
-                name="artist"
-                value={formData.artist}
+                name="organizer"
+                value={formData.organizer}
                 onChange={handleInputChange}
               />
             </label>
@@ -137,7 +150,6 @@ const InputForm = ({ coordinates }) => {
                 name="location"
                 className="input input-bordered w-full max-w-xs"
                 value={city}
-                onChange={handleInputChange}
               />
             </label>
           </div>
@@ -151,8 +163,39 @@ const InputForm = ({ coordinates }) => {
                 type="text"
                 placeholder="Type here"
                 className="input input-bordered w-full max-w-xs"
-                name="price"
-                value={formData.price}
+                name="enteryFees"
+                value={formData.enteryFees}
+                onChange={handleInputChange}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <div className="flex justify-center px-4 pt-2">
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Upload banner</span>
+              </div>
+              <input
+                type="file"
+                onChange={handleFile1}
+                className=" file-input-primary 
+              file-input w-full max-w-xs"
+              />
+            </label>
+          </div>
+          <div className="flex justify-center px-4 pb-2">
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Contact number</span>
+              </div>
+              <input
+                type="text"
+                placeholder="phone number"
+                className="input input-bordered w-full max-w-xs"
+                name="contact"
+                value={formData.contact}
                 onChange={handleInputChange}
               />
             </label>
@@ -162,23 +205,12 @@ const InputForm = ({ coordinates }) => {
         <div className="flex justify-center px-4 py-2">
           <label className="form-control w-full max-w-xs">
             <div className="label">
-              <span className="label-text">Upload banner</span>
-            </div>
-            <input
-              type="file"
-              onChange={handleFile1}
-              className=" file-input-primary 
-              file-input w-full max-w-xs"
-            />
-          </label>
-        </div>
-
-        <div className="flex justify-center px-4 py-2">
-          <label className="form-control w-full max-w-xs">
-            <div className="label">
               <span className="label-text">Start date & End date</span>
             </div>
             <RangePicker
+              onChange={(date, dateString) => {
+                setDate(dateString);
+              }}
               style={{
                 width: "100%",
                 color: "white",
@@ -204,7 +236,7 @@ const InputForm = ({ coordinates }) => {
             <div className="label">
               <span className="label-text">Start & End time</span>
             </div>
-            <TimePickerComponent />
+            <TimePickerComponent setTime={setTime} />
           </label>
         </div>
       </div>
@@ -218,9 +250,10 @@ const InputForm = ({ coordinates }) => {
   );
 };
 
-const TimePickerComponent = () => {
+const TimePickerComponent = ({ setTime }) => {
   const onChange = (time, timeString) => {
     console.log(timeString);
+    setTime(timeString);
   };
   return (
     <TimePicker.RangePicker

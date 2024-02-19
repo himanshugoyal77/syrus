@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const campaignSchema = new mongoose.Schema(
   {
-    name: {
+    eventName: {
       type: String,
       required: true,
     },
@@ -27,19 +27,15 @@ const campaignSchema = new mongoose.Schema(
       required: true,
     },
     organizer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    contact: {
       type: String,
     },
-    price: {
+    enteryFees: {
       type: Number,
     },
     coords: {
       type: [Number],
     },
-    image: {
+    images: {
       type: [String],
     },
     participants: {
@@ -53,6 +49,11 @@ const campaignSchema = new mongoose.Schema(
     reviews: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Review",
+    },
+
+    contact: {
+      type: String,
+      required: true,
     },
   },
   {

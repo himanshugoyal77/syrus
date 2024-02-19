@@ -9,9 +9,17 @@ import {
   addReviewToCampaign,
 } from "./controller/campaign.controller.js";
 import { createUser } from "./controller/user.controller.js";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 8800;
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

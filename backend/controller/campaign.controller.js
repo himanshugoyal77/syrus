@@ -7,7 +7,7 @@ const createCampaign = async (req, res) => {
     await campaign.save();
     res.status(201).send(campaign);
   } catch (error) {
-    res.status
+    res
       .status(400)
       .send({ message: "Error while creating campaign", error: error });
   }
